@@ -1,0 +1,14 @@
+<?xml version = "1.0" encoding="utf-8"?>
+<Collection>
+    <Client id="1" age="45" status="premium">
+        <Surname>Name_1</Surname>
+        <Email>emmm@email.com</Email>
+        <Phone>+25-966-578-22-00</Phone>
+    </Client>
+
+    <Client id="2" age="17" status="standard">
+        <Surname>Name_2</Surname>
+        <Email>another_mail@email.com</Email>
+        <Phone>+25-77-144-58-87</Phone>
+    </Client>
+</Collection>
