@@ -62,6 +62,9 @@ public class Controller {
             Client selected = tableView.getSelectionModel().getSelectedItem();
             if (selected == null) return;
             clientObservableList.remove(selected);
+            // reflect deletions on id (if max deleted)
+            if (selected.isMaximal())
+                Client.decreaseId();
         });
     }
 }
