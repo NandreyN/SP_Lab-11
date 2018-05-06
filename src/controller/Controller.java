@@ -3,10 +3,7 @@ package controller;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.ListView;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import model.Client;
 import model.ClientCollectionParser;
@@ -19,6 +16,9 @@ public class Controller {
 
     @FXML
     private TableView<Client> tableView;
+
+    @FXML
+    private MenuItem deleteButton, addButton, saveButton;
 
     @FXML
     private TableColumn<Client, Integer> idColumn;
@@ -53,5 +53,15 @@ public class Controller {
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
 
         tableView.setItems(clientObservableList);
+
+        configureMenuCommands();
+    }
+
+    private void configureMenuCommands() {
+        deleteButton.setOnAction((e) -> {
+            Client selected = tableView.getSelectionModel().getSelectedItem();
+            if (selected == null) return;
+            clientObservableList.remove(selected);
+        });
     }
 }

@@ -76,4 +76,14 @@ public class Client {
         this.age = age;
         this.status = status;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Client))
+            return false;
+        if (o == this)
+            return true;
+        Client oC = (Client) o;
+        return oC.id == this.id;
+    }
 }
