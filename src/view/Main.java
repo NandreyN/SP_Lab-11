@@ -6,6 +6,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.awt.*;
+
 public class Main extends Application {
 
     @Override
@@ -21,7 +23,12 @@ public class Main extends Application {
     }
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
+        SplashScreen splash = SplashScreen.getSplashScreen();
+        if (splash.isVisible()) {
+            Thread.sleep(1000);
+            splash.close();
+        }
         launch(args);
     }
 }
