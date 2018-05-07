@@ -16,6 +16,7 @@ import model.Validator;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import java.io.IOException;
 
 public class Controller {
@@ -64,7 +65,17 @@ public class Controller {
                 Client.decreaseId();
         });
         addButton.setOnAction((e) -> {
-            Client newClient = new Client("", null, "", Client.getMaxId(), -1, null);
+            boolean name = validator.isValid(nameTextField.getText(), Validator.Modes.WORD),
+                    address = validator.isValid(emailTextField.getText(), Validator.Modes.EMAIL),
+                    phone = validator.isValid(phoneTextField.getText(), Validator.Modes.PHONE),
+                    age = validator.isValid(ageTextField.getText(), Validator.Modes.ID),
+                    status = validator.isValid(statusTextField.getText().toLowerCase(), Validator.Modes.USER_STATUS);
+            if (!(name && phone && age && address && status))
+                return;
+
+            Client newClient = new Client(nameTextField.getText(), new Email(emailTextField.getText()),
+                    phoneTextField.getText(), Client.getMaxId(), Integer.parseInt(ageTextField.getText()),
+                    (statusTextField.getText().equals("premium") ? Client.Status.PREMIUM : Client.Status.STANDARD));
             clientObservableList.add(newClient);
         });
         saveButton.setOnAction((e) -> {
@@ -74,6 +85,11 @@ public class Controller {
                 return;
             }
             // save here
+            try {
+                ClientCollectionParser.save(clientObservableList);
+            } catch (TransformerException | ParserConfigurationException e1) {
+                e1.printStackTrace();
+            }
         });
     }
 
@@ -137,9 +153,10 @@ public class Controller {
     }
 
     private void reflectState(TextField textField, Validator.Modes mode, String newValue, String oldValue) {
-        if (!validator.isValid(newValue, mode))
-            textField.getStyleClass().add("error");
-        else if (validator.isValid(oldValue, mode)) {
+        if (!validator.isValid(newValue, mode)) {
+            if (!textField.getStyleClass().contains("error"))
+                textField.getStyleClass().add("error");
+        } else {
             textField.getStyleClass().remove("error");
         }
     }

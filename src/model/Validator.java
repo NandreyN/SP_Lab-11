@@ -14,8 +14,7 @@ public class Validator {
     private static final String NATURAL_REGEX_STRING = "(\\d*[1-9]\\d*)";
     private static final String EMAIL_REGEX_STRING = "([a-zA-Z0-9_]([.]?)([a-zA-Z0-9_]([.]?))*[a-zA-Z0-9])@([a-zA-Z]{3,6})[.]([a-z]{2,3})";
     private static final String WORD_REGEX = "[a-zA-z]+";
-    private static final String PHONE_REGEX = "[+][1-9][0-9]{1,2}[-]([1-9][0-9]{2})[-]" +
-            "([1-9][0-9])[-]([1-9][0-9])";
+    private static final String PHONE_REGEX = "[+]([1-9][0-9]{1,2})[-]([1-9][0-9]{1,2})[-]([1-9][0-9]{2})[-]([0-9]{2})[-]([0-9]{2})";
     private static final String USER_STATUS_REGEX = "(premium|standard)";
 
     public Validator() {

@@ -51,7 +51,7 @@ public class Client {
     }
 
     public String getPhone() {
-        return phone;
+        return this.phone;
     }
 
     public void setPhone(String phone) {
@@ -103,7 +103,14 @@ public class Client {
     }
 
     public boolean isValid() {
-        return email != null && name != null && !name.equals("") && id <= maxId && age >= 0 &&
-                status != null && phone != null && !phone.equals("");
+        Validator validator = new Validator();
+        boolean name = validator.isValid(getName(), Validator.Modes.WORD),
+                address = validator.isValid(getEmail().toString(), Validator.Modes.EMAIL),
+                phone = validator.isValid(getPhone(), Validator.Modes.PHONE),
+                age = validator.isValid(String.valueOf(getAge()), Validator.Modes.ID),
+                status = validator.isValid(getStatus().toString().toLowerCase(), Validator.Modes.USER_STATUS);
+        if (!(name && phone && age && address && status))
+            return false;
+        return true;
     }
 }

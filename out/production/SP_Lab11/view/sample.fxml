@@ -31,7 +31,7 @@
           </Menu>
         </menus>
       </MenuBar>
-      <TableView fx:id="tableView" editable="true" layoutX="110.0" layoutY="24.0" prefHeight="376.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="24.0">
+      <TableView fx:id="tableView" editable="true" layoutX="110.0" layoutY="24.0" prefHeight="351.0" prefWidth="600.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="24.0">
          <columns>
             <TableColumn fx:id="idColumn" prefWidth="41.0" text="Id" />
             <TableColumn fx:id="nameColumn" prefWidth="136.0" text="Surname" />

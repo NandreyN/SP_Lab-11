@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<Collection>
+<Client age="45" id="1" status="PREMIUM">
+<Surname>Name</Surname>
+<Email>emmm@email.com</Email>
+<Phone>Name</Phone>
+</Client>
+<Client age="17" id="2" status="STANDARD">
+<Surname>AnotherName</Surname>
+<Email>another_mail@email.com</Email>
+<Phone>AnotherName</Phone>
+</Client>
+<Client age="18" id="3" status="STANDARD">
+<Surname>Fdfgfgfd</Surname>
+<Email>nanfsdg@mail.ru</Email>
+<Phone>Fdfgfgfd</Phone>
+</Client>
+</Collection>
