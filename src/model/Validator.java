@@ -11,13 +11,15 @@ public class Validator {
     }
 
     private Map<Modes, Function<String, Pattern>> functionalMap;
-    private static final String NATURAL_REGEX_STRING = "[+]?(\\d*[1-9]\\d*)";
+    private static final String NATURAL_REGEX_STRING = "(\\d*[1-9]\\d*)";
     private static final String EMAIL_REGEX_STRING = "([a-zA-Z0-9_]([.]?)([a-zA-Z0-9_]([.]?))*[a-zA-Z0-9])@([a-zA-Z]{3,6})[.]([a-z]{2,3})";
+    private static final String WORD_REGEX = "[a-zA-z]+";
 
     public Validator() {
         functionalMap = new HashMap<>();
         functionalMap.put(Modes.ID, (x) -> Pattern.compile(NATURAL_REGEX_STRING));
         functionalMap.put(Modes.EMAIL, (x) -> Pattern.compile(EMAIL_REGEX_STRING));
+        functionalMap.put(Modes.WORD, (x) -> Pattern.compile(WORD_REGEX));
     }
 
     public boolean isValid(String requestString, Modes mode) throws IllegalArgumentException {

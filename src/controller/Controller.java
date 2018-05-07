@@ -1,5 +1,8 @@
 package controller;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -9,6 +12,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import model.Client;
 import model.ClientCollectionParser;
 import model.Email;
+import model.Validator;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -31,7 +35,7 @@ public class Controller {
     @FXML
     private MenuBar menuBar;
 
-
+    private Validator validator = new Validator();
     private ObservableList<Client> clientObservableList =
             FXCollections.observableArrayList(new ClientCollectionParser().getCollection());
 
@@ -47,6 +51,7 @@ public class Controller {
         idColumn.setEditable(false);
         tableView.getSelectionModel().setCellSelectionEnabled(true);
         configureMenuCommands();
+        configureInputControls();
     }
 
     private void configureMenuCommands() {
@@ -115,5 +120,26 @@ public class Controller {
             }
             event.getTableView().getItems().get(event.getTablePosition().getRow()).setStatus(newStatus);
         });
+    }
+
+    private void configureInputControls() {
+        nameTextField.textProperty().addListener(
+                (observable, oldValue, newValue) -> reflectState(nameTextField, Validator.Modes.WORD, newValue, oldValue));
+        emailTextField.textProperty().addListener(
+                (observable, oldValue, newValue) -> reflectState(emailTextField, Validator.Modes.EMAIL, newValue, oldValue));
+        phoneTextField.textProperty().addListener(
+                (observable, oldValue, newValue) -> reflectState(phoneTextField, Validator.Modes.PHONE, newValue, oldValue));
+        ageTextField.textProperty().addListener(
+                (observable, oldValue, newValue) -> reflectState(ageTextField, Validator.Modes.ID, newValue, oldValue));
+        statusTextField.textProperty().addListener(
+                (observable, oldValue, newValue) -> reflectState(statusTextField, Validator.Modes.USER_STATUS, newValue, oldValue));
+    }
+
+    private void reflectState(TextField textField, Validator.Modes mode, String newValue, String oldValue) {
+        if (!validator.isValid(newValue, mode))
+            textField.getStyleClass().add("error");
+        else if (validator.isValid(oldValue, mode)) {
+            textField.getStyleClass().remove("error");
+        }
     }
 }
