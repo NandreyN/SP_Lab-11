@@ -132,7 +132,8 @@ public class Controller {
         ageTextField.textProperty().addListener(
                 (observable, oldValue, newValue) -> reflectState(ageTextField, Validator.Modes.ID, newValue, oldValue));
         statusTextField.textProperty().addListener(
-                (observable, oldValue, newValue) -> reflectState(statusTextField, Validator.Modes.USER_STATUS, newValue, oldValue));
+                (observable, oldValue, newValue) -> reflectState(statusTextField, Validator.Modes.USER_STATUS,
+                        newValue.toLowerCase(), oldValue.toLowerCase()));
     }
 
     private void reflectState(TextField textField, Validator.Modes mode, String newValue, String oldValue) {
