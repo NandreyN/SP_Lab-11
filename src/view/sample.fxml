@@ -5,7 +5,9 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
    <children>
@@ -38,5 +40,15 @@
             <TableColumn fx:id="ageColumn" prefWidth="61.0" text="Age" />
             <TableColumn fx:id="statusColumn" prefWidth="82.0" text="Status" />
          </columns></TableView>
+      <HBox layoutY="375.0" prefHeight="25.0" prefWidth="600.0">
+         <children>
+            <TextField fx:id="idTextField" promptText="ID" />
+            <TextField fx:id="nameTextField" promptText="Surname" />
+            <TextField fx:id="emailTextField" promptText="E-Mail" />
+            <TextField fx:id="phoneTextField" promptText="Phone" />
+            <TextField fx:id="ageTextField" promptText="Age" />
+            <TextField fx:id="statusTextField" promptText="Status" />
+         </children>
+      </HBox>
    </children>
 </AnchorPane>

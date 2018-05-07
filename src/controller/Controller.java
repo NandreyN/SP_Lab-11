@@ -21,19 +21,12 @@ public class Controller {
 
     @FXML
     private MenuItem deleteButton, addButton, saveButton;
-
     @FXML
-    private TableColumn<Client, Integer> idColumn;
+    private TableColumn<Client, Integer> idColumn, ageColumn;
     @FXML
-    private TableColumn<Client, Integer> ageColumn;
+    private TableColumn<Client, String> phoneColumn, statusColumn, eMailColumn, nameColumn;
     @FXML
-    private TableColumn<Client, String> nameColumn;
-    @FXML
-    private TableColumn<Client, String> eMailColumn;
-    @FXML
-    private TableColumn<Client, String> phoneColumn;
-    @FXML
-    private TableColumn<Client, String> statusColumn;
+    private TextField idTextField, nameTextField, emailTextField, phoneTextField, ageTextField, statusTextField;
 
     @FXML
     private MenuBar menuBar;
