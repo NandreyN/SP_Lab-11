@@ -42,7 +42,6 @@
          </columns></TableView>
       <HBox layoutY="375.0" prefHeight="25.0" prefWidth="600.0">
          <children>
-            <TextField fx:id="idTextField" promptText="ID" />
             <TextField fx:id="nameTextField" promptText="Surname" />
             <TextField fx:id="emailTextField" promptText="E-Mail" />
             <TextField fx:id="phoneTextField" promptText="Phone" />

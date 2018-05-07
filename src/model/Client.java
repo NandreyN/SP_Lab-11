@@ -20,7 +20,7 @@ public class Client {
         this.id = id;
         this.age = age;
         this.status = status;
-        ++maxId;
+        maxId = Math.max(maxId, id) + 1;
     }
 
     public Client(String name, String emailName, String emailDomain, String phone, int id, int age, Status status) {

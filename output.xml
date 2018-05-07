@@ -1,18 +1,28 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <Collection>
-<Client age="45" id="1" status="PREMIUM">
-<Surname>Name</Surname>
-<Email>emmm@email.com</Email>
-<Phone>Name</Phone>
-</Client>
 <Client age="17" id="2" status="STANDARD">
 <Surname>AnotherName</Surname>
 <Email>another_mail@email.com</Email>
-<Phone>AnotherName</Phone>
+<Phone>+654-877-210-06-00</Phone>
 </Client>
 <Client age="18" id="3" status="STANDARD">
 <Surname>Fdfgfgfd</Surname>
 <Email>nanfsdg@mail.ru</Email>
-<Phone>Fdfgfgfd</Phone>
+<Phone>+855-88-771-65-55</Phone>
+</Client>
+<Client age="84" id="4" status="STANDARD">
+<Surname>FDSFsf</Surname>
+<Email>OOO@mail.ru</Email>
+<Phone>+375-666-666-66-66</Phone>
+</Client>
+<Client age="55" id="5" status="STANDARD">
+<Surname>FDZFSD</Surname>
+<Email>fff@ffff.ff</Email>
+<Phone>+555-55-555-55-55</Phone>
+</Client>
+<Client age="1" id="6" status="STANDARD">
+<Surname>WQE</Surname>
+<Email>fgsdgf@oooo.op</Email>
+<Phone>+365-88-777-08-00</Phone>
 </Client>
 </Collection>

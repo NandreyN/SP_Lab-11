@@ -31,10 +31,7 @@ public class Controller {
     @FXML
     private TableColumn<Client, String> phoneColumn, statusColumn, eMailColumn, nameColumn;
     @FXML
-    private TextField idTextField, nameTextField, emailTextField, phoneTextField, ageTextField, statusTextField;
-
-    @FXML
-    private MenuBar menuBar;
+    private TextField nameTextField, emailTextField, phoneTextField, ageTextField, statusTextField;
 
     private Validator validator = new Validator();
     private ObservableList<Client> clientObservableList =
@@ -53,6 +50,19 @@ public class Controller {
         tableView.getSelectionModel().setCellSelectionEnabled(true);
         configureMenuCommands();
         configureInputControls();
+    }
+
+    private void clearInputs() {
+        nameTextField.clear();
+        nameTextField.getStyleClass().remove("error");
+        emailTextField.clear();
+        emailTextField.getStyleClass().remove("error");
+        phoneTextField.clear();
+        phoneTextField.getStyleClass().remove("error");
+        ageTextField.clear();
+        ageTextField.getStyleClass().remove("error");
+        statusTextField.clear();
+        statusTextField.getStyleClass().remove("error");
     }
 
     private void configureMenuCommands() {
@@ -77,6 +87,7 @@ public class Controller {
                     phoneTextField.getText(), Client.getMaxId(), Integer.parseInt(ageTextField.getText()),
                     (statusTextField.getText().equals("premium") ? Client.Status.PREMIUM : Client.Status.STANDARD));
             clientObservableList.add(newClient);
+            clearInputs();
         });
         saveButton.setOnAction((e) -> {
             boolean containsInvalid = clientObservableList.stream().anyMatch(x -> !x.isValid());
