@@ -97,4 +97,13 @@ public class Client {
     public static void decreaseId() {
         --maxId;
     }
+
+    public static int getMaxId() {
+        return maxId;
+    }
+
+    public boolean isValid() {
+        return email != null && name != null && !name.equals("") && id <= maxId && age >= 0 &&
+                status != null && phone != null && !phone.equals("");
+    }
 }
