@@ -18,7 +18,8 @@ public class Email {
     }
 
     public Email(String address) {
-        if (!validate(address, ValidateTypes.ENTIRE))
+        if (address == null || address.equals("") ||
+                !address.contains("@") ||!validate(address, ValidateTypes.ENTIRE))
             throw new IllegalArgumentException("address");
         this.address = address.split("@")[0];
         this.domain = address.split("@")[1];

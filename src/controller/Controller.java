@@ -49,7 +49,10 @@ public class Controller {
     protected void initialize() {
         configureColumnListeners();
         tableView.setItems(clientObservableList);
-
+        tableView.setEditable(true);
+        tableView.getColumns().forEach(x -> x.setEditable(true));
+        idColumn.setEditable(false);
+        tableView.getSelectionModel().setCellSelectionEnabled(true);
         configureMenuCommands();
     }
 
@@ -63,7 +66,7 @@ public class Controller {
                 Client.decreaseId();
         });
         addButton.setOnAction((e) -> {
-            Client newClient = new Client("", "", "", Client.getMaxId(), -1, null);
+            Client newClient = new Client("", null, "", Client.getMaxId(), -1, null);
             clientObservableList.add(newClient);
         });
         saveButton.setOnAction((e) -> {

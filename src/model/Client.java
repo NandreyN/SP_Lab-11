@@ -11,16 +11,16 @@ public class Client {
     private int id;
     private int age;
     private Status status;
-    private static int maxId = 0;
+    private static int maxId = 1;
 
-    public Client(String name, String email, String phone, int id, int age, Status status) {
+    public Client(String name, Email email, String phone, int id, int age, Status status) {
         this.name = name;
         this.phone = phone;
-        this.email = new Email(email);
+        this.email = email;
         this.id = id;
         this.age = age;
         this.status = status;
-        maxId = Math.max(maxId, id);
+        ++maxId;
     }
 
     public Client(String name, String emailName, String emailDomain, String phone, int id, int age, Status status) {

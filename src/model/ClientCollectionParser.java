@@ -61,7 +61,7 @@ public class ClientCollectionParser {
                         throw new IllegalArgumentException("status");
                 }
 
-                clientCollection.add(new Client(name, email, phone, id, age, status));
+                clientCollection.add(new Client(name, new Email(email), phone, id, age, status));
             }
         }
         return clientCollection;
