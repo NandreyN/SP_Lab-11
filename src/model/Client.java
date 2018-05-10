@@ -1,6 +1,8 @@
 package model;
 
-public class Client {
+import java.io.Serializable;
+
+public class Client implements Serializable{
 
     public enum Status {
         PREMIUM, STANDARD

@@ -27,7 +27,7 @@ public class Controller {
     private TableView<Client> tableView;
 
     @FXML
-    private MenuItem deleteButton, addButton, saveButton, openDOM, openBinary;
+    private MenuItem deleteButton, addButton, saveButton, openDOM, openBinary, saveBinary;
     @FXML
     private TableColumn<Client, Integer> idColumn, ageColumn;
     @FXML
@@ -52,6 +52,7 @@ public class Controller {
 
         configureMenuCommands();
         configureInputControls();
+
     }
 
     private void clearInputs() {
@@ -121,13 +122,14 @@ public class Controller {
                 new Alert(Alert.AlertType.ERROR, e1.getMessage()).showAndWait();
                 return;
             }
-
             tableView.setItems(clientObservableList);
         });
 
         openBinary.setOnAction(e -> {
-
+            clientObservableList = FXCollections.observableArrayList(ClientCollectionParser.deserialize());
+            tableView.setItems(clientObservableList);
         });
+        saveBinary.setOnAction(e -> ClientCollectionParser.serialize(clientObservableList));
     }
 
     private void configureColumnListeners() {

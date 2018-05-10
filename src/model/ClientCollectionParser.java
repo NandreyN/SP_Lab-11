@@ -9,15 +9,15 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
 
 public class ClientCollectionParser {
     private static final String FILE_PATH = System.getProperty("user.dir") + "\\input.xml";
+    private static final String FILE_PATH_BINARY = System.getProperty("user.dir") + "\\input.bin";
     private static final String OUT_FILE_PATH = System.getProperty("user.dir") + "\\output.xml";
+    private static final String OUT_FILE_PATH_BINARY = System.getProperty("user.dir") + "\\output.bin";
 
     public ClientCollectionParser() {
     }
@@ -116,5 +116,31 @@ public class ClientCollectionParser {
         } catch (IOException | TransformerException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void serialize(Collection<Client> clientCollection) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(OUT_FILE_PATH_BINARY))) {
+            for (Client c : clientCollection)
+                oos.writeObject(c);
+
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+
+    public static Collection<Client> deserialize() {
+        Collection<Client> clientCollection = new ArrayList<>();
+
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(FILE_PATH_BINARY))) {
+            while (true) {
+                clientCollection.add((Client) ois.readObject());
+            }
+        } catch (EOFException ex) {
+            return clientCollection;
+
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println(e.getMessage());
+        }
+        return clientCollection;
     }
 }

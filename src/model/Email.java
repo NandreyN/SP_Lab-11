@@ -2,7 +2,9 @@ package model;
 
 import com.sun.javaws.exceptions.InvalidArgumentException;
 
-public class Email {
+import java.io.Serializable;
+
+public class Email implements Serializable {
     private enum ValidateTypes {
         BODY, ENTIRE
     }
