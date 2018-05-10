@@ -9,6 +9,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.FileChooser;
 import model.Client;
 import model.ClientCollectionParser;
 import model.Email;
@@ -17,6 +18,7 @@ import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
+import java.io.File;
 import java.io.IOException;
 
 public class Controller {
@@ -25,7 +27,7 @@ public class Controller {
     private TableView<Client> tableView;
 
     @FXML
-    private MenuItem deleteButton, addButton, saveButton;
+    private MenuItem deleteButton, addButton, saveButton, openDOM, openBinary;
     @FXML
     private TableColumn<Client, Integer> idColumn, ageColumn;
     @FXML
@@ -34,8 +36,7 @@ public class Controller {
     private TextField nameTextField, emailTextField, phoneTextField, ageTextField, statusTextField;
 
     private Validator validator = new Validator();
-    private ObservableList<Client> clientObservableList =
-            FXCollections.observableArrayList(new ClientCollectionParser().getCollection());
+    private ObservableList<Client> clientObservableList;
 
     public Controller() throws IOException, SAXException, ParserConfigurationException {
     }
@@ -43,11 +44,12 @@ public class Controller {
     @FXML
     protected void initialize() {
         configureColumnListeners();
-        tableView.setItems(clientObservableList);
+
         tableView.setEditable(true);
         tableView.getColumns().forEach(x -> x.setEditable(true));
         idColumn.setEditable(false);
         tableView.getSelectionModel().setCellSelectionEnabled(true);
+
         configureMenuCommands();
         configureInputControls();
     }
@@ -101,6 +103,30 @@ public class Controller {
             } catch (TransformerException | ParserConfigurationException e1) {
                 e1.printStackTrace();
             }
+        });
+        openDOM.setOnAction(e -> {
+            /*FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Open Resource File");
+            fileChooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("XML Files", "*.xml"));
+            File selectedFile = fileChooser.showOpenDialog(null);
+
+            if (selectedFile != null) {
+
+            }*/
+
+            try {
+                clientObservableList = FXCollections.observableArrayList(new ClientCollectionParser().getCollection());
+            } catch (ParserConfigurationException | IOException | SAXException e1) {
+                new Alert(Alert.AlertType.ERROR, e1.getMessage()).showAndWait();
+                return;
+            }
+
+            tableView.setItems(clientObservableList);
+        });
+
+        openBinary.setOnAction(e -> {
+
         });
     }
 

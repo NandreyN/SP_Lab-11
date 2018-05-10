@@ -25,7 +25,7 @@ public class Main extends Application {
 
     public static void main(String[] args) throws InterruptedException {
         SplashScreen splash = SplashScreen.getSplashScreen();
-        if (splash.isVisible()) {
+        if (splash != null && splash.isVisible()) {
             Thread.sleep(1000);
             splash.close();
         }
