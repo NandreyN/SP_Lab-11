@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class ClientCollectionParser {
-    private static final String FILE_PATH = System.getProperty("user.dir") + "\\input.xml";
+    public static final String FILE_PATH = System.getProperty("user.dir") + "\\input.xml";
     private static final String FILE_PATH_BINARY = System.getProperty("user.dir") + "\\input.bin";
     private static final String OUT_FILE_PATH = System.getProperty("user.dir") + "\\output.xml";
     private static final String OUT_FILE_PATH_BINARY = System.getProperty("user.dir") + "\\output.bin";

@@ -1,22 +1,16 @@
 package controller;
 
-import javafx.beans.binding.Bindings;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.FileChooser;
-import model.Client;
-import model.ClientCollectionParser;
-import model.Email;
-import model.Validator;
+import model.*;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.TransformerException;
 import java.io.File;
 import java.io.IOException;
@@ -27,7 +21,7 @@ public class Controller {
     private TableView<Client> tableView;
 
     @FXML
-    private MenuItem deleteButton, addButton, saveButton, openDOM, openBinary, saveBinary;
+    private MenuItem deleteButton, addButton, saveButton, openDOM, openBinary, saveBinary, calculations;
     @FXML
     private TableColumn<Client, Integer> idColumn, ageColumn;
     @FXML
@@ -130,6 +124,25 @@ public class Controller {
             tableView.setItems(clientObservableList);
         });
         saveBinary.setOnAction(e -> ClientCollectionParser.serialize(clientObservableList));
+
+        calculations.setOnAction(e -> {
+            SAXParserFactory factory = SAXParserFactory.newInstance();
+            SAXParser parser = null;
+            try {
+                parser = factory.newSAXParser();
+            } catch (ParserConfigurationException | SAXException e1) {
+                e1.printStackTrace();
+            }
+            SAXAnalyzer handler = new SAXAnalyzer();
+            {
+                try {
+                    parser.parse(new File(ClientCollectionParser.FILE_PATH), handler);
+                    new Alert(Alert.AlertType.INFORMATION, handler.getResults()).showAndWait();
+                } catch (SAXException | IOException e1) {
+                    new Alert(null, e1.getMessage()).showAndWait();
+                }
+            }
+        });
     }
 
     private void configureColumnListeners() {

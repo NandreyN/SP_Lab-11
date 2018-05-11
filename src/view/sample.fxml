@@ -19,6 +19,7 @@
                   <MenuItem fx:id="openBinary" mnemonicParsing="false" text="Open binary" />
               <MenuItem fx:id="saveButton" mnemonicParsing="false" text="SaveDOM" />
                   <MenuItem fx:id="openDOM" mnemonicParsing="false" text="Open with DOM" />
+                  <MenuItem fx:id="calculations" mnemonicParsing="false" text="SAX Calculations" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Edit">
