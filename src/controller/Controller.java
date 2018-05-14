@@ -5,6 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.FileChooser;
 import model.*;
 import org.xml.sax.SAXException;
 
@@ -100,18 +101,20 @@ public class Controller {
             }
         });
         openDOM.setOnAction(e -> {
-            /*FileChooser fileChooser = new FileChooser();
+            FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Open Resource File");
             fileChooser.getExtensionFilters().addAll(
                     new FileChooser.ExtensionFilter("XML Files", "*.xml"));
             File selectedFile = fileChooser.showOpenDialog(null);
 
-            if (selectedFile != null) {
-
-            }*/
+            if (selectedFile == null) {
+                new Alert(Alert.AlertType.ERROR, "Choose file").showAndWait();
+                return;
+            }
 
             try {
-                clientObservableList = FXCollections.observableArrayList(new ClientCollectionParser().getCollection());
+                clientObservableList = FXCollections.observableArrayList(ClientCollectionParser.getCollection(
+                        selectedFile.getAbsolutePath()));
             } catch (ParserConfigurationException | IOException | SAXException e1) {
                 new Alert(Alert.AlertType.ERROR, e1.getMessage()).showAndWait();
                 return;
@@ -120,7 +123,19 @@ public class Controller {
         });
 
         openBinary.setOnAction(e -> {
-            clientObservableList = FXCollections.observableArrayList(ClientCollectionParser.deserialize());
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Open Resource File");
+            fileChooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("Binary Files", "*.bin"));
+            File selectedFile = fileChooser.showOpenDialog(null);
+
+            if (selectedFile == null) {
+                new Alert(Alert.AlertType.ERROR, "Choose file correct").showAndWait();
+                return;
+            }
+
+            clientObservableList = FXCollections.observableArrayList(
+                    ClientCollectionParser.deserialize(selectedFile.getAbsolutePath()));
             tableView.setItems(clientObservableList);
         });
         saveBinary.setOnAction(e -> ClientCollectionParser.serialize(clientObservableList));

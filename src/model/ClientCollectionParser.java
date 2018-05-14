@@ -22,8 +22,12 @@ public class ClientCollectionParser {
     public ClientCollectionParser() {
     }
 
-    public Collection<Client> getCollection() throws ParserConfigurationException, IOException, SAXException {
-        File input = new File(FILE_PATH);
+    public static Collection<Client> getCollection() throws IOException, SAXException, ParserConfigurationException {
+        return getCollection(FILE_PATH);
+    }
+
+    public static Collection<Client> getCollection(String path) throws ParserConfigurationException, IOException, SAXException {
+        File input = new File(path);
         assert input.exists();
 
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -129,9 +133,13 @@ public class ClientCollectionParser {
     }
 
     public static Collection<Client> deserialize() {
+        return deserialize(FILE_PATH_BINARY);
+    }
+
+    public static Collection<Client> deserialize(String path) {
         Collection<Client> clientCollection = new ArrayList<>();
 
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(FILE_PATH_BINARY))) {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(path))) {
             while (true) {
                 clientCollection.add((Client) ois.readObject());
             }
