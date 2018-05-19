@@ -22,6 +22,9 @@ public class Controller {
     private TableView<Client> tableView;
 
     @FXML
+    private CheckMenuItem validateCheckBox;
+
+    @FXML
     private MenuItem deleteButton, addButton, saveButton, openDOM, openBinary, saveBinary, calculations;
     @FXML
     private TableColumn<Client, Integer> idColumn, ageColumn;
@@ -101,6 +104,8 @@ public class Controller {
             }
         });
         openDOM.setOnAction(e -> {
+            boolean validate = validateCheckBox.isSelected();
+
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Open Resource File");
             fileChooser.getExtensionFilters().addAll(
@@ -114,7 +119,7 @@ public class Controller {
 
             try {
                 clientObservableList = FXCollections.observableArrayList(ClientCollectionParser.getCollection(
-                        selectedFile.getAbsolutePath()));
+                        selectedFile.getAbsolutePath(),validate));
             } catch (ParserConfigurationException | IOException | SAXException e1) {
                 new Alert(Alert.AlertType.ERROR, e1.getMessage()).showAndWait();
                 return;
@@ -141,6 +146,18 @@ public class Controller {
         saveBinary.setOnAction(e -> ClientCollectionParser.serialize(clientObservableList));
 
         calculations.setOnAction(e -> {
+
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Open Resource File");
+            fileChooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("XML Files", "*.xml"));
+            File selectedFile = fileChooser.showOpenDialog(null);
+
+            if (selectedFile == null) {
+                new Alert(Alert.AlertType.ERROR, "Choose file correct").showAndWait();
+                return;
+            }
+
             SAXParserFactory factory = SAXParserFactory.newInstance();
             SAXParser parser = null;
             try {
@@ -151,7 +168,7 @@ public class Controller {
             SAXAnalyzer handler = new SAXAnalyzer();
             {
                 try {
-                    parser.parse(new File(ClientCollectionParser.FILE_PATH), handler);
+                    parser.parse(selectedFile, handler);
                     new Alert(Alert.AlertType.INFORMATION, handler.getResults()).showAndWait();
                 } catch (SAXException | IOException e1) {
                     new Alert(null, e1.getMessage()).showAndWait();

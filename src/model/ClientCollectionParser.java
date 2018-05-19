@@ -3,12 +3,17 @@ package model;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -18,17 +23,22 @@ public class ClientCollectionParser {
     private static final String FILE_PATH_BINARY = System.getProperty("user.dir") + "\\input.bin";
     private static final String OUT_FILE_PATH = System.getProperty("user.dir") + "\\output.xml";
     private static final String OUT_FILE_PATH_BINARY = System.getProperty("user.dir") + "\\output.bin";
+    private static final String SCHEMA_PATH = System.getProperty("user.dir") + "\\schema.xsd";
 
     public ClientCollectionParser() {
     }
 
-    public static Collection<Client> getCollection() throws IOException, SAXException, ParserConfigurationException {
-        return getCollection(FILE_PATH);
+    public static Collection<Client> getCollection(boolean validate) throws IOException, SAXException, ParserConfigurationException {
+        return getCollection(FILE_PATH, validate);
     }
 
-    public static Collection<Client> getCollection(String path) throws ParserConfigurationException, IOException, SAXException {
+    public static Collection<Client> getCollection(String path, boolean validate) throws ParserConfigurationException, IOException, SAXException {
         File input = new File(path);
         assert input.exists();
+        if (validate) {
+            if (!isValidXML(input))
+                throw new SAXException("Invalid xml file");
+        }
 
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -36,7 +46,7 @@ public class ClientCollectionParser {
 
         doc.getDocumentElement().normalize();
 
-        NodeList clientNodesList = doc.getElementsByTagName("Client");
+        NodeList clientNodesList = doc.getElementsByTagName("my:Client");
 
         Collection<Client> clientCollection = new ArrayList<>();
 
@@ -48,9 +58,9 @@ public class ClientCollectionParser {
                 String name, email, phone;
                 Client.Status status;
 
-                name = clientElement.getElementsByTagName("Surname").item(0).getTextContent();
-                email = clientElement.getElementsByTagName("Email").item(0).getTextContent();
-                phone = clientElement.getElementsByTagName("Phone").item(0).getTextContent();
+                name = clientElement.getElementsByTagName("my:Surname").item(0).getTextContent();
+                email = clientElement.getElementsByTagName("my:Email").item(0).getTextContent();
+                phone = clientElement.getElementsByTagName("my:Phone").item(0).getTextContent();
 
                 id = Integer.parseInt(clientElement.getAttribute("id"));
                 age = Integer.parseInt(clientElement.getAttribute("age"));
@@ -78,23 +88,26 @@ public class ClientCollectionParser {
         DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();
 
         Document document = documentBuilder.newDocument();
-        Element root = document.createElement("Collection");
+        Element root = document.createElementNS(
+                "http://my.namespace.com", // namespace
+                "my:Collection" // node name including prefix
+        );
         document.appendChild(root);
 
         clientCollection.forEach((x) -> {
-            Element elem = document.createElement("Client");
+            Element elem = document.createElement("my:Client");
 
             elem.setAttribute("id", String.valueOf(x.getId()));
             elem.setAttribute("age", String.valueOf(x.getAge()));
             elem.setAttribute("status", String.valueOf(x.getStatus()));
 
-            Element name = document.createElement("Surname");
+            Element name = document.createElement("my:Surname");
             name.appendChild(document.createTextNode(x.getName()));
 
-            Element email = document.createElement("Email");
+            Element email = document.createElement("my:Email");
             email.appendChild(document.createTextNode(x.getEmail().toString()));
 
-            Element phone = document.createElement("Phone");
+            Element phone = document.createElement("my:Phone");
             phone.appendChild(document.createTextNode(x.getPhone()));
 
             elem.appendChild(name);
@@ -150,5 +163,24 @@ public class ClientCollectionParser {
             System.out.println(e.getMessage());
         }
         return clientCollection;
+    }
+
+    private static boolean isValidXML(File xmlFile) throws FileNotFoundException {
+        File file = new File(SCHEMA_PATH);
+        if (!file.exists())
+            throw new FileNotFoundException("Schema file not found");
+
+        Source xmlSource = new StreamSource(xmlFile);
+        SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+
+        try {
+            Schema schema = sf.newSchema(file);
+            Validator v = schema.newValidator();
+            v.validate(xmlSource);
+        } catch (SAXException | IOException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+        return true;
     }
 }

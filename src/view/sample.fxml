@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.CheckMenuItem?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
@@ -17,9 +18,10 @@
             <items>
                   <MenuItem fx:id="saveBinary" mnemonicParsing="false" text="Save binary" />
                   <MenuItem fx:id="openBinary" mnemonicParsing="false" text="Open binary" />
-              <MenuItem fx:id="saveButton" mnemonicParsing="false" text="SaveDOM" />
+                  <MenuItem fx:id="saveButton" mnemonicParsing="false" text="SaveDOM" />
                   <MenuItem fx:id="openDOM" mnemonicParsing="false" text="Open with DOM" />
                   <MenuItem fx:id="calculations" mnemonicParsing="false" text="SAX Calculations" />
+                  <CheckMenuItem fx:id="validateCheckBox" mnemonicParsing="false" text="Validate" selected="true"/>
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Edit">
