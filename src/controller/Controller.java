@@ -15,6 +15,7 @@ import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.TransformerException;
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 public class Controller {
 
@@ -98,7 +99,7 @@ public class Controller {
             }
             // save here
             try {
-                ClientCollectionParser.save(clientObservableList);
+                new ClientCollectionParser().save(clientObservableList);
             } catch (TransformerException | ParserConfigurationException e1) {
                 e1.printStackTrace();
             }
@@ -118,9 +119,9 @@ public class Controller {
             }
 
             try {
-                clientObservableList = FXCollections.observableArrayList(ClientCollectionParser.getCollection(
-                        selectedFile.getAbsolutePath(),validate));
-            } catch (ParserConfigurationException | IOException | SAXException e1) {
+                clientObservableList = FXCollections.observableArrayList(new ClientCollectionParser().getCollection(
+                        selectedFile.getAbsolutePath(), validate));
+            } catch (URISyntaxException | ParserConfigurationException | IOException | SAXException e1) {
                 new Alert(Alert.AlertType.ERROR, e1.getMessage()).showAndWait();
                 return;
             }
@@ -140,10 +141,10 @@ public class Controller {
             }
 
             clientObservableList = FXCollections.observableArrayList(
-                    ClientCollectionParser.deserialize(selectedFile.getAbsolutePath()));
+                    new ClientCollectionParser().deserialize(selectedFile.getAbsolutePath()));
             tableView.setItems(clientObservableList);
         });
-        saveBinary.setOnAction(e -> ClientCollectionParser.serialize(clientObservableList));
+        saveBinary.setOnAction(e -> new ClientCollectionParser().serialize(clientObservableList));
 
         calculations.setOnAction(e -> {
 
@@ -166,13 +167,22 @@ public class Controller {
                 e1.printStackTrace();
             }
             SAXAnalyzer handler = new SAXAnalyzer();
-            {
-                try {
-                    parser.parse(selectedFile, handler);
-                    new Alert(Alert.AlertType.INFORMATION, handler.getResults()).showAndWait();
-                } catch (SAXException | IOException e1) {
-                    new Alert(null, e1.getMessage()).showAndWait();
+            try {
+                if (new ClientCollectionParser().isValidXML(selectedFile))
+                {
+                    try {
+                        parser.parse(selectedFile, handler);
+                        new Alert(Alert.AlertType.INFORMATION, handler.getResults()).showAndWait();
+                    } catch (SAXException | IOException e1) {
+                        new Alert(null, e1.getMessage()).showAndWait();
+                    }
                 }
+                else
+                {
+                    new Alert(null,"Invalid XML file selected");
+                }
+            } catch (IOException | URISyntaxException e1) {
+                e1.printStackTrace();
             }
         });
     }

@@ -22,7 +22,7 @@ public class SAXAnalyzer extends DefaultHandler {
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         currentTag = qName.toLowerCase();
-        if (currentTag.equals("client")) {
+        if (currentTag.equals("my:client")) {
             totalRecords++;
             totalAge += Integer.parseInt(attributes.getValue("age"));
         }
@@ -31,7 +31,7 @@ public class SAXAnalyzer extends DefaultHandler {
     @Override
     public void characters(char ch[], int start, int length) throws SAXException {
         switch (currentTag) {
-            case "email":
+            case "my:email":
                 String inp = new String(ch, start, length);
                 if (inp.length() > longestEmail.length())
                     longestEmail = inp;

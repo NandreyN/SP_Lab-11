@@ -1,7 +1,11 @@
 package model;
 
-import org.w3c.dom.*;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+
 
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
@@ -15,6 +19,11 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 import java.io.*;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -23,16 +32,16 @@ public class ClientCollectionParser {
     private static final String FILE_PATH_BINARY = System.getProperty("user.dir") + "\\input.bin";
     private static final String OUT_FILE_PATH = System.getProperty("user.dir") + "\\output.xml";
     private static final String OUT_FILE_PATH_BINARY = System.getProperty("user.dir") + "\\output.bin";
-    private static final String SCHEMA_PATH = System.getProperty("user.dir") + "\\schema.xsd";
+    private static final String SCHEMA_PATH = "schema.xsd";
 
     public ClientCollectionParser() {
     }
 
-    public static Collection<Client> getCollection(boolean validate) throws IOException, SAXException, ParserConfigurationException {
+    public Collection<Client> getCollection(boolean validate) throws IOException, SAXException, ParserConfigurationException, URISyntaxException {
         return getCollection(FILE_PATH, validate);
     }
 
-    public static Collection<Client> getCollection(String path, boolean validate) throws ParserConfigurationException, IOException, SAXException {
+    public Collection<Client> getCollection(String path, boolean validate) throws ParserConfigurationException, IOException, SAXException, URISyntaxException {
         File input = new File(path);
         assert input.exists();
         if (validate) {
@@ -83,7 +92,7 @@ public class ClientCollectionParser {
         return clientCollection;
     }
 
-    public static void save(Collection<Client> clientCollection) throws TransformerException, ParserConfigurationException {
+    public void save(Collection<Client> clientCollection) throws TransformerException, ParserConfigurationException {
         DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();
 
@@ -135,7 +144,7 @@ public class ClientCollectionParser {
         }
     }
 
-    public static void serialize(Collection<Client> clientCollection) {
+    public void serialize(Collection<Client> clientCollection) {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(OUT_FILE_PATH_BINARY))) {
             for (Client c : clientCollection)
                 oos.writeObject(c);
@@ -145,11 +154,11 @@ public class ClientCollectionParser {
         }
     }
 
-    public static Collection<Client> deserialize() {
+    public Collection<Client> deserialize() {
         return deserialize(FILE_PATH_BINARY);
     }
 
-    public static Collection<Client> deserialize(String path) {
+    public Collection<Client> deserialize(String path) {
         Collection<Client> clientCollection = new ArrayList<>();
 
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(path))) {
@@ -165,10 +174,33 @@ public class ClientCollectionParser {
         return clientCollection;
     }
 
-    private static boolean isValidXML(File xmlFile) throws FileNotFoundException {
-        File file = new File(SCHEMA_PATH);
-        if (!file.exists())
+    public boolean isValidXML(File xmlFile) throws IOException, URISyntaxException {
+        File file = null;
+        String resource = "/schema.xsd";
+        URL res = getClass().getResource(resource);
+        if (res.toString().startsWith("jar:")) {
+            try {
+                InputStream input = getClass().getResourceAsStream(resource);
+                file = File.createTempFile("tempfile", ".tmp");
+                OutputStream out = new FileOutputStream(file);
+                int read;
+                byte[] bytes = new byte[1024];
+
+                while ((read = input.read(bytes)) != -1) {
+                    out.write(bytes, 0, read);
+                }
+                file.deleteOnExit();
+            } catch (IOException ex) {
+                throw ex;
+            }
+        } else {
+            file = new File(res.getFile());
+        }
+
+        if (!file.exists()) {
+            System.out.println(file.getAbsolutePath());
             throw new FileNotFoundException("Schema file not found");
+        }
 
         Source xmlSource = new StreamSource(xmlFile);
         SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
